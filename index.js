@@ -165,6 +165,7 @@ function showMainMenu() {
     } else if (response.mainMenu === 'Quit') {
       // newIntern();
     }
-
+  });
+};
 
 showMainMenu();

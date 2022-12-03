@@ -26,10 +26,10 @@ CREATE TABLE employee (
   manager_id INT, --to hold reference to another employee that is the manager of the current employee (null if the employee has no manager)
   FOREIGN KEY (role_id)
   REFERENCES role(id)
-  ON DELETE SET NULL
-  --FOREIGN KEY (manager_id)
-  --REFERENCES manager(id)
-  --ON DELETE SET NULL,
+  ON DELETE SET NULL --,
+  -- FOREIGN KEY (manager_id)
+  -- REFERENCES manager(id)
+  -- ON DELETE SET NULL,
 );
 
 
