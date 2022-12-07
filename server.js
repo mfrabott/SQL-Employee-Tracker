@@ -63,6 +63,7 @@ function showMainMenu() {
 // WHEN I choose to add an employee
 // THEN I am prompted to enter the employee’s first name, last name, role, and manager, and that employee is added to the database
 const addEmployee = () => {
+  // get role data to add to choices
   db.query('SELECT id, title FROM role', (err, results) => {
         
     let roleChoices = [];
@@ -77,6 +78,7 @@ const addEmployee = () => {
     let managerChoices = [];
     let managerIDs = [];
   
+    // get manager data to add to choices
     db.query('SELECT first_name, last_name, id FROM employee', (err, results) => {
       
       for (i=0; i<results.length; i++) {
@@ -124,12 +126,14 @@ const addEmployee = () => {
       let role_id = 0;
       let manager_id=0;
 
+      // match role_id to selection
       for (i=0; i<roleChoices.length; i++){
         if (roleChoices[i] === role) {
           role_id=roleIDs[i]
         };
       };
 
+      // match manager_id to selection
       for (i=0; i<managerChoices.length; i++){
         if ('No Manager' === manager) {
           manager_id = null;
@@ -153,7 +157,7 @@ const updateEmployeeRole = () => {
   
   let employeeChoices = [];
   let employeeRoles = [];
-
+  // get employee data to add to choices
   db.query('SELECT first_name, last_name, id, role_id FROM employee', (err, results) => {
     
     for (i=0; i<results.length; i++) {
@@ -168,6 +172,7 @@ const updateEmployeeRole = () => {
 
   let roleChoices = []
   let roleIDs = []
+  // get role data to add to choices
   db.query('SELECT title, id FROM role', (err, results) => {
 
     for (i=0; i<results.length; i++) {
@@ -199,12 +204,14 @@ const updateEmployeeRole = () => {
       let employeeID = 0;
       let newID = 0;
 
+      // match employeeID with selection
       for (i=0; i<employeeChoices.length; i++){
         if (employeeChoices[i] === employee) {
           employeeID=employeeRoles[i]
         };
       };
 
+      // match newID with selection 
       for (i=0; i<roleChoices.length; i++){
         if (roleChoices[i] === role) {
           newID=roleIDs[i]
@@ -251,6 +258,7 @@ const addRole = () => {
   
     let deptChoices = []
     let deptIDs = []
+    // get department data for choices
     for (i=0; i<results.length; i++) {
       department=results[i].name;
       deptID=results[i].id;
@@ -284,7 +292,7 @@ const addRole = () => {
       const departmentName = response.department;
       let department = 0;
       
-
+      // match department to selection
       for (i=0; i<deptChoices.length; i++){
         if (deptChoices[i]===departmentName) {
           department=deptIDs[i]
@@ -302,7 +310,7 @@ const addRole = () => {
 // WHEN I choose to view all departments
 // THEN I am presented with a formatted table showing department names and department ids
 const viewDepartments = () => {
-  // Query database
+  // Query database and retun table
   db.query('SELECT * FROM department', async (err, results) => {
     
     console.log(`
@@ -315,7 +323,7 @@ const viewDepartments = () => {
 //  WHEN I choose to view all roles
 // THEN I am presented with the job title, role id, the department that role belongs to, and the salary for that role
 const viewRoles = () => {
-  
+  // Query database and retun table
   db.query('SELECT role.id AS id, role.title AS title, department.name as department, role.salary AS salary FROM department JOIN role ON role.department_id = department.id;', async (err, results) => {
     console.log(`
     `)
@@ -327,14 +335,13 @@ const viewRoles = () => {
 // WHEN I choose to view all employees
 // THEN I am presented with a formatted table showing employee data, including employee ids, first names, last names, job titles, departments, salaries, and managers that the employees report to
 const viewEmployees = () => {
-
+  // Query database and retun table 
   db.query(`SELECT employee.id AS id, employee.first_name AS first_name, employee.last_name AS last_name, role.title AS title, department.name as department, role.salary AS salary, CONCAT(m.first_name, ' ', m.last_name) AS manager FROM employee INNER JOIN role ON employee.role_id = role.id INNER JOIN department ON role.department_id = department.id LEFT JOIN employee m ON employee.manager_id = m.id ORDER BY employee.id;`, async (err, results) => {
     console.log(`
     `)
     await console.table(results);
     await showMainMenu();
   });  
-
 };
 
 showMainMenu();
