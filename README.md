@@ -14,8 +14,6 @@
 
 [Contributing](#Contributing)
 
-[Tests](#Tests)
-
 [Questions](#Questions)
 
 ## Project Description
